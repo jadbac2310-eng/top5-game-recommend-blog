@@ -1,0 +1,363 @@
+/* ===== おすすめゲーム5選ブログ ── e-Sports / ネオン ゲーミングデザイン ===== */
+
+:root {
+  --bg: #0b0f1a;
+  --bg-2: #121a2e;
+  --panel: rgba(20, 28, 48, 0.72);
+  --panel-solid: #141c30;
+  --text: #f2f5ff;
+  --text-muted: #9fb0d0;
+  --cyan: #00e5ff;
+  --magenta: #ff2bd6;
+  --lime: #aaff00;
+  --violet: #7a5cff;
+  --border: rgba(122, 92, 255, 0.35);
+  --radius: 4px;
+  --clip: polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 18px 100%, 0 calc(100% - 18px));
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  color: var(--text);
+  font-family: "Inter", "Hiragino Kaku Gothic ProN", "Yu Gothic", "Meiryo",
+    system-ui, sans-serif;
+  line-height: 1.8;
+  -webkit-font-smoothing: antialiased;
+  /* ネオングリッド × 動的グラデーション背景 */
+  background-color: var(--bg);
+  background-image: linear-gradient(rgba(122, 92, 255, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 229, 255, 0.06) 1px, transparent 1px),
+    radial-gradient(1200px 600px at 80% -10%, rgba(255, 43, 214, 0.18), transparent 60%),
+    radial-gradient(1000px 500px at 0% 0%, rgba(0, 229, 255, 0.16), transparent 55%),
+    linear-gradient(160deg, var(--bg) 0%, var(--bg-2) 100%);
+  background-size: 44px 44px, 44px 44px, 100% 100%, 100% 100%, 100% 100%;
+  background-attachment: fixed;
+}
+
+a {
+  color: var(--cyan);
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: none;
+}
+
+.container {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 28px 20px 72px;
+}
+
+/* 見出しは Orbitron でゲーミングらしく */
+.site-header h1,
+.hero-title,
+.game-title,
+.rank-badge {
+  font-family: "Orbitron", "Inter", sans-serif;
+  letter-spacing: 0.04em;
+}
+
+/* ===== トップページ ヘッダー ===== */
+.site-header {
+  position: relative;
+  text-align: center;
+  padding: 72px 20px 40px;
+  border-bottom: 2px solid transparent;
+  border-image: linear-gradient(90deg, transparent, var(--cyan), var(--magenta), transparent) 1;
+}
+.site-header h1 {
+  margin: 0 0 12px;
+  font-size: 2.4rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  background: linear-gradient(92deg, var(--cyan), var(--violet) 45%, var(--magenta));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 0 0 28px rgba(0, 229, 255, 0.25);
+}
+.site-header p {
+  margin: 0;
+  color: var(--text-muted);
+  letter-spacing: 0.02em;
+}
+
+/* ===== 記事一覧 ===== */
+.post-list {
+  list-style: none;
+  margin: 28px 0 0;
+  padding: 0;
+}
+.post-list li {
+  position: relative;
+  background: var(--panel);
+  backdrop-filter: blur(6px);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--cyan);
+  clip-path: var(--clip);
+  margin-bottom: 14px;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+.post-list li:hover {
+  transform: translateX(6px);
+  border-left-color: var(--magenta);
+  box-shadow: -6px 0 24px rgba(255, 43, 214, 0.25);
+}
+.post-list a {
+  display: block;
+  padding: 18px 24px;
+  color: var(--text);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+.post-list a:hover {
+  color: var(--cyan);
+}
+
+/* ===== 記事ページ ヒーロー ===== */
+.hero {
+  position: relative;
+  border-bottom: 2px solid transparent;
+  border-image: linear-gradient(90deg, var(--cyan), var(--magenta)) 1;
+}
+.hero-image {
+  width: 100%;
+  height: auto;
+  display: block;
+  max-height: 480px;
+  object-fit: cover;
+  filter: saturate(1.15) contrast(1.05);
+}
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 32px 24px;
+  background: linear-gradient(
+    to top,
+    rgba(11, 15, 26, 0.96) 0%,
+    rgba(11, 15, 26, 0.45) 45%,
+    rgba(11, 15, 26, 0) 100%
+  );
+}
+.hero-title {
+  margin: 0 auto 8px;
+  width: 100%;
+  max-width: 880px;
+  font-size: 2.1rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  text-shadow: 0 0 24px rgba(0, 229, 255, 0.45), 0 2px 10px rgba(0, 0, 0, 0.6);
+}
+.hero-date {
+  margin: 0 auto;
+  width: 100%;
+  max-width: 880px;
+  color: var(--cyan);
+  font-family: "Orbitron", sans-serif;
+  font-size: 0.9rem;
+  letter-spacing: 0.12em;
+}
+
+/* ===== 戻るリンク ===== */
+.back-link {
+  display: inline-block;
+  margin: 4px 0 26px;
+  padding: 8px 16px;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border: 1px solid var(--border);
+  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+  transition: color 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+}
+.back-link:hover {
+  color: var(--cyan);
+  border-color: var(--cyan);
+  box-shadow: 0 0 18px rgba(0, 229, 255, 0.25);
+}
+
+/* ===== ランキングカード ===== */
+.ranking {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.rank-card {
+  position: relative;
+  display: flex;
+  gap: 20px;
+  background: var(--panel);
+  backdrop-filter: blur(6px);
+  border: 1px solid var(--border);
+  clip-path: var(--clip);
+  padding: 24px;
+  overflow: hidden;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+/* 左端のネオンライン */
+.rank-card::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: linear-gradient(180deg, var(--cyan), var(--magenta));
+  box-shadow: 0 0 16px rgba(0, 229, 255, 0.6);
+}
+.rank-card:hover {
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: 0 12px 40px rgba(122, 92, 255, 0.3),
+    0 0 0 1px rgba(0, 229, 255, 0.4) inset;
+}
+.rank-badge {
+  flex: 0 0 auto;
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  font-size: 2rem;
+  font-weight: 800;
+  color: #07101f;
+  background: linear-gradient(135deg, var(--cyan), var(--violet));
+  clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+  box-shadow: 0 0 22px rgba(0, 229, 255, 0.45);
+}
+.rank-badge span {
+  font-size: 0.7rem;
+  font-weight: 700;
+  align-self: flex-end;
+  margin-bottom: 12px;
+}
+/* 1位は金、2位は銀、3位は銅っぽく */
+.rank-card:nth-child(1) .rank-badge {
+  background: linear-gradient(135deg, #ffe14d, #ff8a00);
+  box-shadow: 0 0 26px rgba(255, 196, 0, 0.6);
+}
+.rank-card:nth-child(2) .rank-badge {
+  background: linear-gradient(135deg, #e8f0ff, #9fb6d8);
+}
+.rank-card:nth-child(3) .rank-badge {
+  background: linear-gradient(135deg, #ffb877, #c1622d);
+}
+.rank-body {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.game-title {
+  margin: 0 0 10px;
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+.game-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+.tag {
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
+  border: 1px solid var(--border);
+}
+.tag.platform {
+  color: #07101f;
+  background: var(--cyan);
+  border-color: var(--cyan);
+}
+.tag.genre {
+  color: #07101f;
+  background: var(--lime);
+  border-color: var(--lime);
+}
+.game-description {
+  margin: 0 0 12px;
+}
+.game-reason {
+  margin: 0;
+  padding: 12px 14px;
+  background: rgba(122, 92, 255, 0.1);
+  border-left: 3px solid var(--magenta);
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+.game-reason strong {
+  color: var(--magenta);
+}
+
+/* ===== まとめ ===== */
+.summary {
+  margin: 36px 0;
+  padding: 26px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  clip-path: var(--clip);
+  position: relative;
+}
+.summary::before {
+  content: "// SUMMARY";
+  display: block;
+  font-family: "Orbitron", sans-serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  color: var(--cyan);
+  margin-bottom: 10px;
+}
+.summary p {
+  margin: 0;
+}
+
+/* ===== フッター ===== */
+.site-footer {
+  text-align: center;
+  padding: 30px 20px;
+  border-top: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+}
+
+/* ===== レスポンシブ ===== */
+@media (max-width: 600px) {
+  .site-header h1 {
+    font-size: 1.8rem;
+  }
+  .hero-title {
+    font-size: 1.5rem;
+  }
+  .hero-image {
+    max-height: 280px;
+  }
+  .rank-card {
+    flex-direction: column;
+    gap: 14px;
+    padding: 20px;
+  }
+  .rank-badge {
+    width: 54px;
+    height: 54px;
+    font-size: 1.6rem;
+  }
+  .rank-badge span {
+    margin-bottom: 9px;
+  }
+}

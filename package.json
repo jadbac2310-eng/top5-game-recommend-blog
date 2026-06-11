@@ -1,0 +1,14 @@
+{
+  "name": "top5-game-recommend-blog",
+  "version": "1.0.0",
+  "description": "Claude API と OpenAI API を使って毎日おすすめゲーム5選の記事を自動生成するブログ",
+  "type": "module",
+  "main": "generate.js",
+  "scripts": {
+    "generate": "node generate.js"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.30.1",
+    "openai": "^4.67.3"
+  }
+}
