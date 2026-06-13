@@ -223,6 +223,103 @@ a:hover {
   box-shadow: 0 12px 40px rgba(122, 92, 255, 0.3),
     0 0 0 1px rgba(0, 229, 255, 0.4) inset;
 }
+
+/* ===== 自社アプリ 紹介カード（1位と2位の間） ===== */
+.promo-card {
+  position: relative;
+  display: block;
+  background: var(--panel);
+  backdrop-filter: blur(6px);
+  border: 1px solid var(--accent-2);
+  clip-path: var(--clip);
+  overflow: hidden;
+  box-shadow: 0 0 24px rgba(255, 179, 71, 0.22);
+}
+/* カード上部に「PR」表記（広告表示の明示） */
+.promo-tag {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 2;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 3px 9px;
+  border-radius: 4px;
+}
+.promo-image {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.promo-body {
+  padding: 22px;
+}
+.promo-title {
+  font-family: "Orbitron", "Inter", sans-serif;
+  font-weight: 800;
+  font-size: 1.5rem;
+  margin: 0 0 10px;
+  color: var(--accent-2);
+}
+.promo-description {
+  margin: 0 0 16px;
+}
+.promo-points-title {
+  margin: 0 0 8px;
+  font-weight: 700;
+  color: var(--accent-2);
+  font-size: 0.95rem;
+}
+.promo-points {
+  margin: 0 0 16px;
+  padding: 0;
+  list-style: none;
+}
+.promo-points li {
+  position: relative;
+  padding-left: 24px;
+  margin-bottom: 6px;
+  color: var(--text-muted);
+}
+.promo-points li::before {
+  content: "▶";
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: var(--accent-2);
+  font-size: 0.8rem;
+}
+.promo-price {
+  margin: 0 0 18px;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+/* ストアボタン（公式バッジ：iOS / Android 個別） */
+.store-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+.store-btn {
+  display: inline-flex;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: transform 0.16s ease, box-shadow 0.16s ease;
+}
+.store-btn:hover {
+  transform: translateY(-2px);
+  text-decoration: none;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+}
+.store-badge {
+  display: block;
+  height: 52px;
+  width: auto;
+}
 .rank-badge {
   flex: 0 0 auto;
   width: 64px;
@@ -258,6 +355,18 @@ a:hover {
 .rank-body {
   flex: 1 1 auto;
   min-width: 0;
+}
+/* 1位カード内に表示するゲーム関連画像 */
+.game-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 320px;
+  object-fit: cover;
+  margin: 0 0 16px;
+  border: 1px solid var(--border);
+  clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 14px 100%, 0 calc(100% - 14px));
+  filter: saturate(1.12) contrast(1.04);
 }
 .game-title {
   margin: 0 0 10px;

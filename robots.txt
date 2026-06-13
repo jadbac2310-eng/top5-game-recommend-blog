@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://jadbac2310-eng.github.io/top5-game-recommend-blog/sitemap.xml
