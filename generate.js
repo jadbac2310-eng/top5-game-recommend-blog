@@ -500,8 +500,13 @@ async function main() {
     throw new Error("環境変数 OPENAI_API_KEY が設定されていません。");
   }
 
-  const date = todayJST();
-  console.log(`[1/7] 日付: ${date}`);
+  // 日付は通常 JST の本日。引数 or 環境変数で上書き可能（例: node generate.js 2026-06-12）
+  const dateOverride = process.argv[2] || process.env.POST_DATE;
+  if (dateOverride && !/^\d{4}-\d{2}-\d{2}$/.test(dateOverride)) {
+    throw new Error(`日付の形式が不正です（YYYY-MM-DD）: ${dateOverride}`);
+  }
+  const date = dateOverride || todayJST();
+  console.log(`[1/7] 日付: ${date}${dateOverride ? "（指定）" : ""}`);
 
   const usedGames = loadUsedGames();
   console.log(`[1/7] 紹介済みゲーム: ${usedGames.length} 件`);
