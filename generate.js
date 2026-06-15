@@ -86,6 +86,33 @@ function loadUsedGames() {
   }
 }
 
+// 記事データの構造化スキーマ（構造化フォールバックで使用）
+const ARTICLE_SCHEMA = {
+  type: "object",
+  properties: {
+    title: { type: "string" },
+    date: { type: "string" },
+    thumbnail_prompt: { type: "string" },
+    games: {
+      type: "array",
+      items: {
+        type: "object",
+        properties: {
+          rank: { type: "integer" },
+          title: { type: "string" },
+          platform: { type: "string" },
+          genre: { type: "string" },
+          description: { type: "string" },
+          reason: { type: "string" },
+        },
+        required: ["rank", "title", "platform", "genre", "description", "reason"],
+      },
+    },
+    summary: { type: "string" },
+  },
+  required: ["title", "thumbnail_prompt", "games", "summary"],
+};
+
 // ---- 2. Claude API で記事を生成 ----
 async function generateArticle(usedGames, date) {
   const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
@@ -148,14 +175,23 @@ ${usedList}
     .join("\n")
     .trim();
 
-  const article = extractJson(text);
+  // まずローカルで JSON 抽出を試み、失敗したら構造化フォールバックで確実に取得する
+  let article;
+  try {
+    article = extractJson(text);
+  } catch (err) {
+    console.warn(
+      `[2/7] JSON抽出に失敗（${err.message}）。構造化フォールバックを実行します...`
+    );
+    article = await structureArticle(anthropic, text);
+  }
 
   // 念のため date を補正
   article.date = article.date || date;
   return article;
 }
 
-// テキストから JSON 部分を抽出してパースする
+// テキストから JSON 部分を抽出してパースする（崩れていれば軽微な補修を試みる）
 function extractJson(text) {
   // ```json ... ``` で囲まれている場合に対応
   const fenced = text.match(/```(?:json)?\s*([\s\S]*?)```/);
@@ -168,7 +204,74 @@ function extractJson(text) {
     throw new Error("Claude の応答から JSON を抽出できませんでした:\n" + text);
   }
   const jsonStr = candidate.slice(start, end + 1);
-  return JSON.parse(jsonStr);
+  try {
+    return JSON.parse(jsonStr);
+  } catch {
+    // 末尾カンマや文字列内の生の改行/タブなど、よくある崩れを補修して再試行
+    return JSON.parse(repairJson(jsonStr));
+  }
+}
+
+// よくある JSON の崩れを補修する（文字列内の生の制御文字をエスケープ、末尾カンマ除去）
+function repairJson(s) {
+  let out = "";
+  let inStr = false;
+  let esc = false;
+  for (let i = 0; i < s.length; i++) {
+    const ch = s[i];
+    if (esc) {
+      out += ch;
+      esc = false;
+      continue;
+    }
+    if (ch === "\\") {
+      out += ch;
+      esc = true;
+      continue;
+    }
+    if (ch === '"') {
+      inStr = !inStr;
+      out += ch;
+      continue;
+    }
+    if (inStr) {
+      if (ch === "\n") out += "\\n";
+      else if (ch === "\r") out += "\\r";
+      else if (ch === "\t") out += "\\t";
+      else out += ch;
+      continue;
+    }
+    out += ch;
+  }
+  // 文字列外の末尾カンマを除去（ } や ] の直前）
+  return out.replace(/,(\s*[}\]])/g, "$1");
+}
+
+// 構造化フォールバック：ツール出力を強制し、必ず妥当な JSON オブジェクトを得る
+async function structureArticle(anthropic, draft) {
+  const res = await anthropic.messages.create({
+    model: "claude-sonnet-4-6",
+    max_tokens: 4096,
+    tools: [
+      {
+        name: "emit_article",
+        description: "記事データを指定スキーマで構造化して出力する",
+        input_schema: ARTICLE_SCHEMA,
+      },
+    ],
+    tool_choice: { type: "tool", name: "emit_article" },
+    messages: [
+      {
+        role: "user",
+        content: `次の記事ドラフトを、ツール emit_article の入力として正確に構造化してください。内容は変えず、ゲームは rank 1〜5 の5本すべてを含めてください。\n\n---\n${draft}`,
+      },
+    ],
+  });
+  const block = res.content.find((b) => b.type === "tool_use");
+  if (!block) {
+    throw new Error("構造化フォールバックでツール出力が得られませんでした。");
+  }
+  return block.input;
 }
 
 // ---- 3. OpenAI API でサムネイル画像を生成 ----
@@ -549,4 +652,4 @@ if (isDirectRun) {
   });
 }
 
-export { buildArticleHtml, buildJsonLd, writeSitemap, writeRobots, toMetaDescription };
+export { buildArticleHtml, buildJsonLd, writeSitemap, writeRobots, toMetaDescription, extractJson, repairJson };
