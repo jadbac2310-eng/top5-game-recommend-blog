@@ -507,13 +507,16 @@ a:hover {
   .rank-card {
     flex-direction: column;
     gap: 14px;
-    padding: 16px;
+    padding: 16px 12px;
+  }
+  .game-reason {
+    padding: 10px 12px;
   }
   .summary {
-    padding: 18px 16px;
+    padding: 18px 14px;
   }
   .promo-body {
-    padding: 16px;
+    padding: 16px 12px;
   }
   .rank-badge {
     width: 54px;
