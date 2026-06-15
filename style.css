@@ -499,10 +499,21 @@ a:hover {
   .hero-image {
     max-height: 280px;
   }
+  /* スマホでは余白を詰めて本文の横幅を広く使う */
+  .container {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
   .rank-card {
     flex-direction: column;
     gap: 14px;
-    padding: 20px;
+    padding: 16px;
+  }
+  .summary {
+    padding: 18px 16px;
+  }
+  .promo-body {
+    padding: 16px;
   }
   .rank-badge {
     width: 54px;
