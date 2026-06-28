@@ -1,9 +1,10 @@
 name: Daily Game Post
 
 on:
-  schedule:
-    # 毎日 日本時間 6:00（UTC 21:00）に実行
-    - cron: "0 21 * * *"
+  # 自動投稿は停止中。手動実行のみ有効。
+  # schedule:
+  #   # 毎日 日本時間 6:00（UTC 21:00）に実行
+  #   - cron: "0 21 * * *"
   workflow_dispatch: # 手動実行も可能にする
 
 permissions:
