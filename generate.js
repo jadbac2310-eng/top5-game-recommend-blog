@@ -1,4 +1,4 @@
-// 毎日「おすすめゲーム5選」の記事を自動生成するスクリプト
+// 3日に1回「おすすめゲーム5選」の記事を自動生成するスクリプト
 // 1. used_games.json で被り防止
 // 2. Claude API (web_search) で記事を生成
 // 3. OpenAI API (gpt-image-1) でサムネイル画像を生成
@@ -516,7 +516,7 @@ function updateIndex(article, date) {
 <body>
   <header class="site-header">
     <h1>おすすめゲーム5選ブログ</h1>
-    <p>毎日更新！今プレイすべきゲームをランキング形式で紹介します。</p>
+    <p>3日ごとに更新！今プレイすべきゲームをランキング形式で紹介します。</p>
   </header>
 
   <main class="container">

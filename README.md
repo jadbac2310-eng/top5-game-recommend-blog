@@ -1,6 +1,6 @@
 # おすすめゲーム5選ブログ
 
-Claude API（記事生成）と OpenAI API（サムネイル画像生成）を使って、**毎日自動で「おすすめゲーム5選」のランキング記事を生成**する静的ブログです。GitHub Actions により日本時間の毎朝6時に記事が追加されます。
+Claude API（記事生成）と OpenAI API（サムネイル画像生成）を使って、**3日に1回自動で「おすすめゲーム5選」のランキング記事を生成**する静的ブログです。GitHub Actions により3日おきに日本時間の朝6時に記事が追加されます。
 
 ## 仕組み
 
@@ -59,7 +59,7 @@ GitHub Actions で自動実行するには、リポジトリに **Secrets** を�
 | `ANTHROPIC_API_KEY` | Anthropic（Claude）の API キー |
 | `OPENAI_API_KEY`    | OpenAI の API キー             |
 
-登録後、`.github/workflows/daily-post.yml` が毎日 **日本時間 6:00（UTC 21:00）** に実行され、生成した記事を自動コミット＆プッシュします。`Actions` タブから手動実行（`Run workflow`）も可能です。
+登録後、`.github/workflows/daily-post.yml` が毎日 **日本時間 6:00（UTC 21:00）** に起動し、3日に1回だけ記事を生成して、生成した記事を自動コミット＆プッシュします。`Actions` タブから手動実行（`Run workflow`）も可能です。
 
 > **Note**: Actions がリポジトリへ push できるよう、ワークフローには `permissions: contents: write` を設定済みです。`Settings > Actions > General > Workflow permissions` が **Read and write permissions** になっていることも確認してください。
 

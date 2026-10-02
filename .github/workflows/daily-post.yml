@@ -1,17 +1,33 @@
-name: Daily Game Post
+name: Game Post (every 3 days)
 
 on:
-  # 自動投稿は停止中。手動実行のみ有効。
-  # schedule:
-  #   # 毎日 日本時間 6:00（UTC 21:00）に実行
-  #   - cron: "0 21 * * *"
+  schedule:
+    # 3日に1回 日本時間 6:00（UTC 21:00）に実行
+    # cron の */3 は月末でズレるため、毎日起動して下の check ジョブで間引く
+    - cron: "0 21 * * *"
   workflow_dispatch: # 手動実行も可能にする
 
 permissions:
   contents: write
 
 jobs:
+  check:
+    runs-on: ubuntu-latest
+    outputs:
+      run: ${{ steps.interval.outputs.run }}
+    steps:
+      - id: interval
+        run: |
+          # 手動実行は常に実行。定期実行は UNIX 通算日 % 3 == 1 の日だけ実行（2026-10-03 JST から3日おき）
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] || [ $(( $(date -u +%s) / 86400 % 3 )) -eq 1 ]; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "run=false" >> "$GITHUB_OUTPUT"
+          fi
+
   generate:
+    needs: check
+    if: needs.check.outputs.run == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -39,6 +55,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "変更なし。コミットをスキップします。"
           else
-            git commit -m "Add daily game post ($(TZ=Asia/Tokyo date +%Y-%m-%d))"
+            git commit -m "Add game post ($(TZ=Asia/Tokyo date +%Y-%m-%d))"
             git push
           fi
