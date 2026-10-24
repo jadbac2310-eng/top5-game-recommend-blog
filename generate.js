@@ -1,7 +1,7 @@
 // 3日に1回「おすすめゲーム5選」の記事を自動生成するスクリプト
 // 1. used_games.json で被り防止
 // 2. Claude API (web_search) で記事を生成
-// 3. OpenAI API (gpt-image-1) でサムネイル画像を生成
+// 3. OpenAI API (gpt-image-2.5-sunburst) でサムネイル画像を生成
 // 4. posts/YYYY-MM-DD.html を出力
 // 5. index.html に記事リンクを追記
 // 6. used_games.json を更新
@@ -279,7 +279,7 @@ async function generateThumbnail(prompt, date) {
   const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
   const result = await openai.images.generate({
-    model: "gpt-image-1",
+    model: process.env.IMAGE_MODEL || "gpt-image-2.5-sunburst",
     prompt,
     size: "1536x1024",
     n: 1,
