@@ -275,20 +275,53 @@ async function structureArticle(anthropic, draft) {
 }
 
 // ---- 3. OpenAI API でサムネイル画像を生成 ----
-async function generateThumbnail(prompt, date) {
-  const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+// 安全フィルターで弾かれた時の再試行用プロンプト（暴力・人物表現を含まない汎用的な絵柄）
+const SAFE_THUMBNAIL_PROMPT =
+  "A bright, colorful, family-friendly illustration of a cozy gaming setup: a glowing game controller on a desk, " +
+  "soft neon lights, floating abstract shapes and stars, cheerful atmosphere, no text, no logos, no people.";
 
+function isModerationBlocked(err) {
+  return (
+    err?.code === "moderation_blocked" ||
+    err?.error?.code === "moderation_blocked" ||
+    /safety system/i.test(err?.message || "")
+  );
+}
+
+async function requestImage(openai, prompt) {
   const result = await openai.images.generate({
     model: process.env.IMAGE_MODEL || "gpt-image-2.5-sunburst",
     prompt,
     size: "1536x1024",
     n: 1,
   });
+  return result.data[0].b64_json;
+}
 
-  const b64 = result.data[0].b64_json;
+async function generateThumbnail(prompt, date) {
+  const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
   ensureDir(IMAGES_DIR);
   const imagePath = path.join(IMAGES_DIR, `${date}.png`);
-  fs.writeFileSync(imagePath, Buffer.from(b64, "base64"));
+
+  let b64 = null;
+  try {
+    b64 = await requestImage(openai, prompt);
+  } catch (err) {
+    if (!isModerationBlocked(err)) throw err;
+    console.warn("[3/7] ⚠️ 安全フィルターで拒否されたため、汎用プロンプトで再試行します。");
+    try {
+      b64 = await requestImage(openai, SAFE_THUMBNAIL_PROMPT);
+    } catch (err2) {
+      console.warn(`[3/7] ⚠️ 再試行も失敗しました（${err2?.message || err2}）。既定画像を使用します。`);
+    }
+  }
+
+  if (b64) {
+    fs.writeFileSync(imagePath, Buffer.from(b64, "base64"));
+  } else {
+    // 最終フォールバック：サイト共通の hero.png を流用して記事投稿は継続する
+    fs.copyFileSync(path.join(__dirname, "assets", "hero.png"), imagePath);
+  }
 
   // 記事HTMLから参照する相対パス
   return `../assets/images/${date}.png`;
