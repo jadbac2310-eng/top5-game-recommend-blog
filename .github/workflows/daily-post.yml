@@ -51,7 +51,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add posts assets index.html used_games.json
+          git add posts assets index.html used_games.json sitemap.xml robots.txt
           if git diff --cached --quiet; then
             echo "変更なし。コミットをスキップします。"
           else
